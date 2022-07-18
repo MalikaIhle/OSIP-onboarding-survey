@@ -1,0 +1,265 @@
+---
+title: "OSIP survey results 26.07.2022"
+format: html
+editor: visual
+---
+
+```{r}
+#| echo: false
+#| include: false
+
+library(stringr)
+library(tidyverse)
+
+```
+
+## Descriptive statistics
+
+```{r}
+#| echo: false
+data <- read.csv("OSIP_onboarding_survey.csv", header = TRUE)
+data <- data[data$ended != "",]
+data <- data[data$freecareer != "thank the formr monkey",]
+data <- data[data$freecareer != "TEST",]
+```
+
+Number of sign up to mailing list since first advertisement fo the survey on the psychology department mailing list (12.07.2022): **5**
+
+Total number of subscribers to the OSIP mailing list: **47**
+
+Total number of participant in the OSIP survey: **`r nrow(data)`**
+
+## Survey Resuts
+
+### Participants
+
+```{r}
+#| echo: false
+table(data$career)
+
+```
+
+#### Other
+
+```{r}
+#| echo: false
+table(data$freecareer[data$freecareer != ""])
+```
+
+### Activities
+
+'What do you expect from the OSIP community?'
+
+```{r}
+#| echo: false
+
+data$expectations_training <- grepl("training", data$expectations, fixed = TRUE)
+data$expectations_seminar <- grepl("seminar", data$expectations, fixed = TRUE)
+data$expectations_commcalls <- grepl("community calls", data$expectations, fixed = TRUE)
+data$expectations_LMUchat <- grepl("LMU chat", data$expectations, fixed = TRUE)
+data$expectations_metaresearch <- grepl("meta research", data$expectations, fixed = TRUE)
+data$expectations_advocacy <- grepl("advocacy", data$expectations, fixed = TRUE)
+data$expectations_hackathon <- grepl("hackathon", data$expectations, fixed = TRUE)
+
+
+data_expectation <- data[, grepl(pattern="expectations_", x=colnames(data), fixed = TRUE)]
+
+expectation_to_plot <- colSums(data_expectation)
+names(expectation_to_plot) <- str_remove(names(expectation_to_plot), "expectations_")
+
+expectation_to_plot <- sort(expectation_to_plot, decreasing = FALSE)
+
+par(mar=c(4,10,4,4))
+barplot(expectation_to_plot, horiz = TRUE, las = 1, xlim = c(0,20))
+
+
+```
+
+#### Other activities
+
+```{r}
+#| echo: false
+table(data$freeexpectation[data$freeexpectation != ""])
+```
+
+### Topics
+
+'Which topics would you be interested to hear about in talks/workshops/seminars?'
+
+```{r}
+#| echo: false
+
+data$topics_metaperspective <- grepl("meta-perspective", data$topics, fixed = TRUE)
+data$topics_metapublications <- grepl("meta-publications", data$topics, fixed = TRUE)
+data$topics_news <- grepl("news", data$topics, fixed = TRUE)
+data$topics_OSP4beginners <- grepl("OSP for beginners", data$topics, fixed = TRUE)
+data$topics_prereg <- grepl("prereg", data$topics, fixed = TRUE)
+data$topics_regrep <- grepl("regrep", data$topics, fixed = TRUE)
+data$topics_reproducibility <- grepl("reproducibility", data$topics, fixed = TRUE)
+data$topics_FAIRdata <- grepl("FAIR data", data$topics, fixed = TRUE)
+data$topics_power <- grepl("power", data$topics, fixed = TRUE)
+data$topics_QRP <- grepl("QRP", data$topics, fixed = TRUE)
+data$topics_OA <- grepl("OA", data$topics, fixed = TRUE)
+data$topics_recruitmentcriteria <- grepl("recruitment criteria", data$topics, fixed = TRUE)
+
+
+data_topics <- data[, grepl(pattern="topics_", x=colnames(data), fixed = TRUE)]
+
+topics_to_plot <- colSums(data_topics)
+names(topics_to_plot) <- str_remove(names(topics_to_plot), "topics_")
+
+topics_to_plot <- sort(topics_to_plot, decreasing = FALSE)
+
+par(mar=c(4,10,4,4))
+barplot(topics_to_plot, horiz = TRUE, las = 1, xlim = c(0,20))
+
+
+```
+
+#### Other topics
+
+```{r}
+#| echo: false
+table(data$freetopics[data$freetopics != ""])
+```
+
+### Duration
+
+'What length of OSIP events (e.g., workshops) would you consider joining?'
+
+```{r}
+#| echo: false
+
+data$duration_1h <- grepl("max. 1h", data$duration, fixed = TRUE)
+data$duration_2h <- grepl("2-3h", data$duration, fixed = TRUE)
+data$duration_halfday <- grepl("half-day", data$duration, fixed = TRUE)
+data$duration_multidays <- grepl("multi-day", data$duration, fixed = TRUE)
+
+data_duration <- data[, grepl(pattern="duration_", x=colnames(data), fixed = TRUE)]
+
+duration_to_plot <- colSums(data_duration)
+names(duration_to_plot) <- str_remove(names(duration_to_plot), "duration_")
+
+duration_to_plot <- sort(duration_to_plot, decreasing = FALSE)
+
+par(mar=c(4,10,4,4))
+barplot(duration_to_plot, horiz = TRUE, las = 1, xlim = c(0,20))
+
+
+```
+
+### Participation
+
+'In what way would you prefer to participate in the OSIP community?'
+
+```{r}
+#| echo: false
+
+data$participation_attend_OnetoMany <- grepl("attend one-to-many", data$participation, fixed = TRUE)
+data$participation_lead_OnetoMany <- grepl("lead one-to-many", data$participation, fixed = TRUE)
+data$participation_attend_hachathon <- grepl("attend hackathon", data$participation, fixed = TRUE)
+data$participation_lead_hachathon <- grepl("facilitate hackathon", data$participation, fixed = TRUE)
+data$participation_attend_commcall <- grepl("attend comm call", data$participation, fixed = TRUE)
+data$participation_lead_commcall <- grepl("present comm call", data$participation, fixed = TRUE)
+data$participation_attendJC <- grepl("attend JC", data$participation, fixed = TRUE)
+data$participation_hostJC <- grepl("host JC", data$participation, fixed = TRUE)
+data$participation_attend_networking <- grepl("attend networking event", data$participation, fixed = TRUE)
+data$participation_organise_networking <- grepl("organize networking event", data$participation, fixed = TRUE)
+data$participation_LMUchat <- grepl("LMU chat", data$participation, fixed = TRUE)
+data$participation_read_newsletter <- grepl("read newsletter", data$participation, fixed = TRUE)
+data$participation_contribute_newsletter <- grepl("contribute newsletter", data$participation, fixed = TRUE)
+data$participation_contact_person <- grepl("contact person", data$participation, fixed = TRUE)
+data$participation_steering_group <- grepl("steering group", data$participation, fixed = TRUE)
+
+data_participation <- data[, grepl(pattern="participation_", x=colnames(data), fixed = TRUE)]
+
+participation_to_plot <- colSums(data_participation)
+names(participation_to_plot) <- str_remove(names(participation_to_plot), "participation_")
+
+participation_to_plot <- sort(participation_to_plot, decreasing = FALSE)
+
+par(mar=c(4,10,4,4))
+barplot(participation_to_plot, horiz = TRUE, las = 1, xlim = c(0,20))
+
+
+```
+
+#### Other participation
+
+```{r}
+#| echo: false
+table(data$freeparticipation[data$freeparticipation != ""])
+```
+
+### Contributions
+
+'Do you have resources/perspectives you would like to contribute?'
+
+```{r}
+#| echo: false
+
+
+data$contributions_doc <- grepl("doc", data$contributions, fixed = TRUE)
+data$contributions_blog <- grepl("blog", data$contributions, fixed = TRUE)
+data$contributions_research <- grepl("research", data$contributions, fixed = TRUE)
+data$contributions_problem <- grepl("problem", data$contributions, fixed = TRUE)
+data$contributions_resources <- grepl("resources", data$contributions, fixed = TRUE)
+data$contributions_experience <- grepl("experience", data$contributions, fixed = TRUE)
+data$contributions_no <- grepl("no", data$contributions, fixed = TRUE)
+
+data_contributions <- data[, grepl(pattern="contributions_", x=colnames(data), fixed = TRUE)]
+
+contributions_to_plot <- colSums(data_contributions)
+names(contributions_to_plot) <- str_remove(names(contributions_to_plot), "contributions_")
+
+contributions_to_plot <- sort(contributions_to_plot, decreasing = FALSE)
+
+par(mar=c(4,10,4,4))
+barplot(contributions_to_plot, horiz = TRUE, las = 1, xlim = c(0,20))
+
+
+```
+
+#### Other contributions
+
+```{r}
+#| echo: false
+table(data$freecontributions[data$freecontributions != ""])
+```
+
+### Hopes
+
+'Do you have any specific hopes for the OSIP community? What would be valuable for you?'
+
+```{r}
+#| echo: false
+data$hopes[data$hopes != "" & data$hopes != "nope" & data$hopes != "/" & data$hopes != "nothing" & data$hopes != "." & data$hopes != "x" & data$hopes != "leer" & data$hopes != " " & data$hopes != "-" & data$hopes != "No specific hopes."]
+```
+
+### Inclusion
+
+'What would help you feel comfortable contributing? (e..g, language, online vs. in-person events, synchronous vs asynchronous contributions)'
+
+```{r}
+#| echo: false
+data$inclusion[data$inclusion != "" & data$inclusion != "nope" & data$inclusion != "/" & data$inclusion != "nothing" & data$inclusion != "." & data$inclusion != "x" & data$inclusion != "leer" & data$inclusion != " " & data$inclusion != "-" & data$inclusion != "not sure" & data$inclusion != "--"]
+```
+
+### Comments
+
+'Do you have any other comments?'
+
+```{r}
+#| echo: false
+data$comment[data$comment != "" & data$comment != "nope" & data$comment != "/" & data$comment != "nothing" & data$comment != "." & data$comment != "x" & data$comment != "leer" & data$comment != " " & data$comment != "-" & data$comment != "not sure" & data$comment != "--" & data$comment != "No." & data$comment != "No" & data$comment != "nope :)" & !is.na(data$comment) & data$comment != "No other comments." & data$comment != "no" & data$comment != "nein"]
+```
+
+### Subscription
+
+'Are you currently subscribed to the OSIP mailing list or wish to be?'
+
+```{r}
+#| echo: false
+
+table(data$subscribe)
+```
